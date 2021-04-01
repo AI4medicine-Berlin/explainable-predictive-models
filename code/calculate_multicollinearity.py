@@ -57,11 +57,12 @@ def calculate_multicollinearity():
     if imputation_type == "mean/mode":
         # Calculate the mean of numerical variables in the dataset and round the
         # floating point to two.
-        num_data_means = round(df.loc[:, data.num_data].mean(),2)
+        num_data_means = df.loc[:, data.num_data].mean()
         # Calculate the mode of categorical data in the dataset
-        cat_data_modes = round(df.loc[:, data.cat_preds].mean())
+        cat_data_modes = df.loc[:, data.cat_preds].mode()
 
-        df.fillna(pd.concat((num_data_means,cat_data_modes)), inplace = True)
+        df.fillna(num_data_means, inplace = True)
+        df.fillna(cat_data_modes.to_dict('r')[0], inplace = True)
 
     # Center numeric data
     df.loc[:, data.num_data] = preprocessing.StandardScaler().fit_transform(
@@ -93,3 +94,4 @@ def calculate_multicollinearity():
     df_vif.to_csv(
         f"{to_save_path}{dataset_name}_multicollinearity.csv", float_format="%2.2f"
     )
+    print(f"{to_save_path}{dataset_name}_multicollinearity.csv")
