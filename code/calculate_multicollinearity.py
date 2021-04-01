@@ -57,7 +57,7 @@ def calculate_multicollinearity():
     if imputation_type == "mean/mode":
         # Calculate the mean of numerical variables in the dataset and round the
         # floating point to two.
-        num_data_means = df.loc[:, data.num_data].mean()
+        num_data_means = round(df.loc[:, data.num_data].mean(),2)
         # Calculate the mode of categorical data in the dataset
         cat_data_modes = df.loc[:, data.cat_preds].mode()
 
