@@ -26,6 +26,8 @@ features:
   Sex_clin : sex
   Pup_clin : pupil status
 
+cat features encoding : Yes
+
 # 2. Modeling Properties ------------------------------------------------------------
 
 impute data : Yes

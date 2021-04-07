@@ -35,6 +35,7 @@ class Model(metaclass=ABCMeta):
 
 	:param name: Name of the model 
 	:param dataset: The dataset for the model to train on
+    :param cat_encoding: Whether OneHotEncoding should be applied to 
 	:param fixed_params: Hyperparameters that won't be used in model tuning
 	:param tuning_params: Hyperparameters that can be used in model tuning
 
@@ -56,6 +57,8 @@ class Model(metaclass=ABCMeta):
         dataset: Dict,
         fixed_params: Dict[str, Union[str, float]],
         tuning_params: Dict[str, Union[str, float]] = None,
+        cat_encoding: str = 'No',
+
     ):
         self.name = name
         self.X_tr = dataset["train_data"]
@@ -63,12 +66,21 @@ class Model(metaclass=ABCMeta):
         self.X_te = dataset["test_data"]
         self.y_te = dataset["test_labels"]
 
+        self.cat_encoding = cat_encoding
         self.fixed_params = fixed_params
         self.tuning_params = tuning_params
 
         if self.fixed_params.get("out_activation") is "softmax":
             self.y_tr = pd.get_dummies(self.y_tr)
             self.y_te = pd.get_dummies(self.y_te)
+
+        if self.name != "Catboost" and self.cat_encoding == 'Yes':
+            cols_to_be_encoded = []
+            for col in list(self.X_tr.columns[self.X_tr.dtypes == 'category']):
+                if self.X_tr[col].nunique() > 2:
+                    cols_to_be_encoded.append(col)
+            self.X_tr = pd.get_dummies(self.X_tr, columns=cols_to_be_encoded)
+            self.X_te = pd.get_dummies(self.X_te, columns=cols_to_be_encoded)
 
     def load_model(self, path: str) -> None:
         """

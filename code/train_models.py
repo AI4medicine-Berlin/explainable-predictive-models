@@ -62,6 +62,7 @@ def train_models():
     dataset_path = cfg["data path"]
     splits_path = cfg["splits path"]
     number_of_splits = cfg["number of splits"]
+    cat_features_encoding = cfg["cat features encoding"]
     impute_data = cfg["impute data"]
     imputation_type = cfg["imputation type"]
     models_to_train,explainability_measures = config_handler(cfg)
@@ -147,6 +148,7 @@ def train_models():
                     dataset=data.splits[i],
                     fixed_params=fixed_params,
                     tuning_params=tune_params,
+                    cat_encoding=cat_features_encoding,
                 )
 
                 print(f"Number of training samples: {len(model.y_tr)}")
