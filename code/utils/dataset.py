@@ -129,7 +129,7 @@ class ClinicalDataset:
                 # floating point to two.
                 num_data_means_training = round(train.loc[:, self.num_data].mean(),2)
                 # Calculate the mode of categorical data in the dataset
-                cat_data_modes_training = train.loc[:, data.cat_preds].mode()
+                cat_data_modes_training = train.loc[:, self.cat_preds].mode()
 
                 train.fillna(num_data_means_training, inplace = True)
                 train.fillna(cat_data_modes_training.to_dict('r')[0], inplace = True)
